@@ -1,6 +1,7 @@
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from fastapi import HTTPException
+from fastapi.responses import JSONResponse
 from jose import jwt, JWTError
 from app.utils import SECRET_KEY, ALGORITHM
 from app.models import SessionLocal, RoutePermission
@@ -34,6 +35,11 @@ class RoleBasedAccessMiddleware(BaseHTTPMiddleware):
                         raise HTTPException(status_code=403, detail="Forbidden")
                 except JWTError:
                     raise HTTPException(status_code=401, detail="Invalid token")
+        except HTTPException as exc:
+            return JSONResponse(
+                status_code=exc.status_code,
+                content={"detail": exc.detail}
+            )
         finally:
             db.close()
 

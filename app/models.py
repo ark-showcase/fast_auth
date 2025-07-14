@@ -27,21 +27,3 @@ class UserGroups(Base):
     __tablename__ = "user_groups"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), unique=True, index=True)
-
-# For dev/demo purposes (still in memory)
-fake_users_db: Dict[str, dict] = {
-    "admin_user": {
-        "username": "admin_user",
-        "password": "$2b$12$kbO3/4NHPPogyvgYvoCdcOlPITKhN/tWA3WOAAfTmkFQA2LeJkjuu",  # "adminpass"
-        "group": "admin"
-    },
-    "normal_user": {
-        "username": "normal_user",
-        "password": "$2b$12$AFUZ1oj5zDwGxyixOdOt4enKTGivIQThYOwOM2cF1rDzEEZ7goYyO",  # "userpass"
-        "group": "user"
-    }
-}
-fake_groups_db: Dict[str, list] = {
-    "admin": [],
-    "user": []
-}

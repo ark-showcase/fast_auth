@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Body, Query, Path
 from sqlalchemy.orm import Session
 from app.models import SessionLocal, RoutePermission
 from app.roles import get_user_from_cookie
@@ -19,7 +19,7 @@ def list_permissions(db: Session = Depends(get_db)):
 
 @admin_router.post("/permissions")
 def create_permission(
-    permission: PermissionCreateRequest,
+    permission: PermissionCreateRequest = Body(..., description='Route path param'),
     db: Session = Depends(get_db)
 ):
 
@@ -37,7 +37,10 @@ def create_permission(
     return new_perm
 
 @admin_router.delete("/permissions")
-def delete_permission(path: str, db: Session = Depends(get_db)):
+def delete_permission(
+        path: str = Query(description='Route path param'),
+        db: Session = Depends(get_db)
+):
     perm = db.query(RoutePermission).filter_by(path=path).first()
     if not perm:
         raise HTTPException(status_code=404, detail="Permission not found")

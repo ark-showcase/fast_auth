@@ -38,7 +38,7 @@ def create_permission(
 
 @admin_router.delete("/permissions")
 def delete_permission(
-        path: str = Query(description='Route path param'),
+        path: str = Query(..., description='Route path param'),
         db: Session = Depends(get_db)
 ):
     perm = db.query(RoutePermission).filter_by(path=path).first()
